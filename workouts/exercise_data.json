@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Push-ups",
+        "description": "A basic upper-body strength exercise.",
+        "target_muscles": "Chest, Triceps, Shoulders, Core",
+        "instructions": "Start in a high plank position, lower your body until your chest nearly touches the floor, then push back up."
+    },
+    {
+        "name": "Squats",
+        "description": "A lower-body exercise that strengthens the legs and glutes.",
+        "target_muscles": "Quadriceps, Glutes, Hamstrings, Core",
+        "instructions": "Stand with feet shoulder-width apart, lower your body by bending your knees and pushing your hips back, then return to standing."
+    },
+    {
+        "name": "Pull-ups",
+        "description": "An upper-body exercise targeting the back and arms.",
+        "target_muscles": "Back, Biceps, Shoulders",
+        "instructions": "Grip a pull-up bar with palms facing forward, pull yourself up until your chin is above the bar, then lower yourself down."
+    },
+    {
+        "name": "Lunges",
+        "description": "A single-leg strength exercise.",
+        "target_muscles": "Quadriceps, Glutes, Hamstrings, Core",
+        "instructions": "Step forward with one leg, lower your hips until both knees are at a 90-degree angle, then push back up to the starting position."
+    },
+    {
+        "name": "Deadlifts",
+        "description": "A compound strength exercise for the posterior chain.",
+        "target_muscles": "Hamstrings, Glutes, Lower Back, Core",
+        "instructions": "Stand with feet hip-width apart, grip a barbell, hinge at your hips, keep your back straight, lift the bar to hip height, then lower it back down."
+    },
+    {
+        "name": "Bench Press",
+        "description": "A strength exercise for the chest and upper body.",
+        "target_muscles": "Chest, Triceps, Shoulders",
+        "instructions": "Lie on a bench, grip a barbell slightly wider than shoulder-width, lower the bar to your chest, then press it back up."
+    },
+    {
+        "name": "Plank",
+        "description": "A core stabilization exercise.",
+        "target_muscles": "Core, Shoulders, Lower Back",
+        "instructions": "Hold a push-up position with your elbows on the ground, keeping your body in a straight line."
+    },
+    {
+        "name": "Bicep Curls",
+        "description": "An isolation exercise for the arms.",
+        "target_muscles": "Biceps",
+        "instructions": "Hold dumbbells with palms facing up, curl the weights towards your shoulders, then lower them slowly."
+    },
+    {
+        "name": "Overhead Shoulder Press",
+        "description": "A compound movement for shoulder strength.",
+        "target_muscles": "Shoulders, Triceps, Upper Chest",
+        "instructions": "Hold dumbbells or a barbell at shoulder height, press them overhead, then lower them back to the starting position."
+    },
+    {
+        "name": "Russian Twists",
+        "description": "A core rotation exercise.",
+        "target_muscles": "Obliques, Core",
+        "instructions": "Sit on the floor, lean back slightly, twist your torso from side to side while holding a weight or medicine ball."
+    },
+    {
+        "name": "Burpees",
+        "description": "A full-body cardio and strength movement.",
+        "target_muscles": "Full Body (Chest, Legs, Core, Arms)",
+        "instructions": "Squat down, kick your legs back into a push-up position, return to squat, then jump up explosively."
+    },
+    {
+        "name": "Jump Rope",
+        "description": "A cardio exercise for endurance and agility.",
+        "target_muscles": "Legs, Calves, Core, Shoulders",
+        "instructions": "Hold a jump rope, swing it around your body, and jump over it continuously."
+    },
+    {
+        "name": "Triceps Dips",
+        "description": "An exercise for the back of the arms.",
+        "target_muscles": "Triceps, Shoulders, Chest",
+        "instructions": "Sit on the edge of a bench, place hands beside your hips, lower your body by bending your elbows, then push back up."
+    },
+    {
+        "name": "Mountain Climbers",
+        "description": "A dynamic core and cardio exercise.",
+        "target_muscles": "Core, Shoulders, Legs",
+        "instructions": "Start in a plank position, quickly alternate bringing knees to chest in a running motion."
+    },
+    {
+        "name": "Box Jumps",
+        "description": "An explosive plyometric movement.",
+        "target_muscles": "Quadriceps, Glutes, Hamstrings, Core",
+        "instructions": "Stand in front of a box, jump onto it using both feet, then step or jump down."
+    },
+    {
+        "name": "Leg Press",
+        "description": "A lower-body strength exercise using a machine.",
+        "target_muscles": "Quadriceps, Glutes, Hamstrings",
+        "instructions": "Sit on the leg press machine, push the platform away with your legs, then return slowly."
+    },
+    {
+        "name": "Seated Row",
+        "description": "A pulling movement for the upper back.",
+        "target_muscles": "Back, Biceps, Shoulders",
+        "instructions": "Sit at a row machine, pull the handle towards your torso, then slowly return to the starting position."
+    },
+    {
+        "name": "Calf Raises",
+        "description": "A lower leg strengthening exercise.",
+        "target_muscles": "Calves",
+        "instructions": "Stand on the edge of a step, push through the balls of your feet to raise your body, then lower slowly."
+    },
+    {
+        "name": "Face Pulls",
+        "description": "A shoulder stability and posture exercise.",
+        "target_muscles": "Rear Delts, Upper Back, Traps",
+        "instructions": "Use a cable machine, pull the rope towards your face, keeping your elbows high."
+    },
+    {
+        "name": "Side Plank",
+        "description": "A core stabilization exercise targeting the obliques.",
+        "target_muscles": "Obliques, Core, Shoulders",
+        "instructions": "Lie on your side, support yourself on one elbow, keep your body straight, and hold the position."
+    }
+]

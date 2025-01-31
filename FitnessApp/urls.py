@@ -14,9 +14,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
-from django.urls import path
+from django.contrib import admin
+from django.urls import path, include, re_path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Fitness API",
+        default_version='v1',
+        description="API documentation for the fitness app",
+        terms_of_service="https://www.yoursite.com/terms/",
+        contact=openapi.Contact(email="contact@yoursite.com"),
+        license=openapi.License(name="MIT License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
 urlpatterns = [
-    #    path('admin/', admin.site.urls),
+        path('admin/', admin.site.urls),
+        path('api/auth/', include('users.urls')),
+        path('api/workouts/', include('workouts.urls')),
+        # Swagger UI (Main Documentation Page)
+        path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+        path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+        re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
 ]
