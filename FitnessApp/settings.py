@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'users',
     'workouts',
-    'tracking'
+    'tracking',
+    'workout_mode'
 ]
 
 REST_FRAMEWORK = {

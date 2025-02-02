@@ -39,6 +39,7 @@ urlpatterns = [
         path('api/auth/', include('users.urls')),
         path('api/workouts/', include('workouts.urls')),
         path('api/tracking/', include('tracking.urls')),
+        path('api/workout_mode/', include('workout_mode.urls')),
         # Swagger UI (Main Documentation Page)
         path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
         path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

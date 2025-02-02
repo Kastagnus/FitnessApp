@@ -26,6 +26,7 @@ class WorkoutExercise(models.Model):
     reps = models.IntegerField(null=True, blank=True, help_text="Reps per set")
     duration = models.IntegerField(null=True, blank=True, help_text="Duration in seconds")
     distance = models.FloatField(null=True, blank=True, help_text="Distance in meters (for cardio exercises)")
+    rest_period = models.IntegerField(null=True, blank=True, help_text="Rest period in seconds between sets")  # Added this
 
     def __str__(self):
         return f"{self.exercise.name} - {self.workout_plan.name}"
