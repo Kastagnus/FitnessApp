@@ -40,8 +40,6 @@ class WorkoutPlanListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         if getattr(self, 'swagger_fake_view', False):
             return WorkoutPlan.objects.none()
-        if not self.request.user.is_authenticated:
-            raise NotAuthenticated("You must be logged in to view workout plans.")
         return WorkoutPlan.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
@@ -82,6 +80,4 @@ class WorkoutPlanDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         if getattr(self, 'swagger_fake_view', False):
             return WorkoutPlan.objects.none()
-        if not self.request.user.is_authenticated:
-            raise NotAuthenticated("You must be logged in to view workout plans.")
         return WorkoutPlan.objects.filter(user=self.request.user)

@@ -21,20 +21,18 @@ class FitnessGoal(models.Model):
     def progress_percentage(self):
         """Calculate progress based on goal type."""
         if self.goal_type == "lose_weight":
-            # Weight loss progress = (starting weight - current weight) / (starting weight - target weight)
             if self.current_progress > self.target_value:  # Ensure valid range
                 return round(
                     ((self.starting_weight - self.current_progress) / (self.starting_weight - self.target_value)) * 100,
                     2)
         elif self.goal_type == "gain_muscle":
-            # Strength progress = (current lifting progress / target lifting goal) * 100
             return round(((self.current_progress - self.starting_weight) / (self.target_value - self.starting_weight)) * 100, 2)
 
-        return 0.0  # Default if no valid calculation
+        return 0.0  # Default Value
 
     def save(self, *args, **kwargs):
         if not self.starting_weight:
-            self.starting_weight = self.current_progress  # Set initial weight
+            self.starting_weight = self.current_progress  # Set starting weight
         super().save(*args, **kwargs)
 
     def __str__(self):

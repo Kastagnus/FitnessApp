@@ -3,12 +3,9 @@ from rest_framework import generics
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
-
-from .models import WorkoutSession, SessionExercise, ExerciseSetProgress
-from .serializers import WorkoutSessionSerializer, SessionExerciseSerializer, ExerciseSetProgressSerializer
+from .models import WorkoutSession, ExerciseSetProgress
+from .serializers import WorkoutSessionSerializer, ExerciseSetProgressSerializer
 from rest_framework.exceptions import NotAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
 class WorkoutSessionListCreateView(generics.ListCreateAPIView):
     serializer_class = WorkoutSessionSerializer
     permission_classes = [IsAuthenticated]
@@ -45,8 +42,8 @@ class WorkoutSessionListCreateView(generics.ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            raise NotAuthenticated()
+        if getattr(self, 'swagger_fake_view', False):
+            return WorkoutSession.objects.none()
         return WorkoutSession.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
@@ -70,6 +67,10 @@ class WorkoutSessionDetailView(generics.RetrieveUpdateDestroyAPIView):
     )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        """Update the state of the workout session."""
+        return super().update(request, *args, **kwargs)
 
     @swagger_auto_schema(
         operation_description="Update workout session status (complete/cancel).",
@@ -103,8 +104,8 @@ class WorkoutSessionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            raise NotAuthenticated()
+        if getattr(self, 'swagger_fake_view', False):
+            return WorkoutSession.objects.none()
         return WorkoutSession.objects.filter(user=self.request.user)
 
 class ExerciseSetProgressUpdateView(generics.UpdateAPIView):
@@ -112,17 +113,18 @@ class ExerciseSetProgressUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="Update progress for a specific exercise set.",
+        operation_description="Update progress for a specific exercise settt.",
         manual_parameters=[
             openapi.Parameter('session_id', openapi.IN_PATH, type=openapi.TYPE_INTEGER),
             openapi.Parameter('exercise_id', openapi.IN_PATH, type=openapi.TYPE_INTEGER),
-            openapi.Parameter('set_number', openapi.IN_PATH, type=openapi.TYPE_INTEGER),
+            # openapi.Parameter('set_number', openapi.IN_PATH, type=openapi.TYPE_INTEGER),
         ],
         request_body=ExerciseSetProgressSerializer
     )
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
-
+    @swagger_auto_schema(
+        operation_description="Update progress for a specific exercise set.",)
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
@@ -130,7 +132,6 @@ class ExerciseSetProgressUpdateView(generics.UpdateAPIView):
         session_id = self.kwargs.get('session_id')
         exercise_id = self.kwargs.get('exercise_id')
         set_number = self.kwargs.get('set_number')
-
         try:
             return ExerciseSetProgress.objects.get(
                 session_exercise__workout_session_id=session_id,
@@ -139,16 +140,3 @@ class ExerciseSetProgressUpdateView(generics.UpdateAPIView):
             )
         except ExerciseSetProgress.DoesNotExist:
             raise Http404("Set progress not found")
-    # def patch(self, request, session_id, exercise_id, set_number):
-    #     try:
-    #         set_progress = ExerciseSetProgress.objects.get(
-    #             session_exercise__workout_session_id=session_id,
-    #             session_exercise__workout_exercise_id=exercise_id,
-    #             set_number=set_number
-    #         )
-    #         serializer = self.get_serializer(set_progress, data=request.data, partial=True)
-    #         serializer.is_valid(raise_exception=True)
-    #         self.perform_update(serializer)
-    #         return Response(serializer.data)
-    #     except ExerciseSetProgress.DoesNotExist:
-    #         return Response({"error": "Set not found"}, status=404)

@@ -32,8 +32,9 @@ class FitnessGoalUpdateSerializer(serializers.ModelSerializer):
             "id", "goal_type", "target_value", "starting_weight",
             "current_progress", "progress_percentage", "status", "progress_entries"
         ]
+        #read only mode for updates
         extra_kwargs = {
-            'goal_type': {'read_only': True}  # This makes it read-only for updates
+            'goal_type': {'read_only': True}
         }
 
     def get_progress_percentage(self, obj):

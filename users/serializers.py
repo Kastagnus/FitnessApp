@@ -5,11 +5,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
-        return data  # The password field is never included in the response
+        return data  # restricting password into responses
 
     class Meta:
         fields = ['username', 'password']
-        extra_kwargs = {'password': {'write_only': True}}  # Hide password input
+        extra_kwargs = {'password': {'write_only': True}}  # Hiding password (for production)
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=6)

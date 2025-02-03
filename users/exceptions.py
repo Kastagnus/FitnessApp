@@ -5,20 +5,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, PermissionDenied, ValidationError
 import logging
 
-logger = logging.getLogger(__name__)  # Logging for debugging if needed
+logger = logging.getLogger(__name__)  # for logging when we use debugging mode
 
 
 def custom_exception_handler(exc, context):
-    """Custom exception handler for cleaner API responses."""
+    """Custom exception handler"""
 
-    # Let DRF's default exception handler process the exception
     response = exception_handler(exc, context)
 
-    # If response exists, modify it to return clean error messages
     if response is not None:
         custom_response = {"error": response.data}
 
-        # Customize error messages for clarity
+        # Customizing error messages
         if isinstance(exc, NotAuthenticated):
             custom_response["error"] = "Authentication credentials were not provided or are invalid."
         elif isinstance(exc, AuthenticationFailed):
@@ -30,7 +28,7 @@ def custom_exception_handler(exc, context):
         elif isinstance(exc, ValidationError):
             custom_response["error"] = "Invalid data submitted."
 
-        # Log the error (optional, useful for debugging)
+        # Log the error
         logger.error(f"API Exception: {exc} - Context: {context}")
 
         return Response(custom_response, status=response.status_code)

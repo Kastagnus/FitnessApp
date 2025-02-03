@@ -23,6 +23,23 @@ class FitnessGoalViewSet(viewsets.ModelViewSet):
             return FitnessGoal.objects.none()
         return FitnessGoal.objects.filter(user=self.request.user)
 
+    def list(self, request, *args, **kwargs):
+        """
+        Displaying all fitness goals for the authenticated user.
+        """
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve a fitness goal by its ID for the authenticated user.
+        """
+        goal = self.get_object()
+        if goal.user != request.user:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+        serializer = self.get_serializer(goal)
+        return Response(serializer.data)
+        
     def perform_create(self, serializer):
         """
         Assigns the authenticated user and saves initial progress.
@@ -141,7 +158,7 @@ class FitnessGoalViewSet(viewsets.ModelViewSet):
 
 
 class FitnessGoalProgressViewSet(viewsets.ReadOnlyModelViewSet):
-    """Viewset for retrieving progress history of a goal."""
+    """Viewset for retrieving progress history of all the goals."""
     serializer_class = FitnessGoalProgressSerializer
     permission_classes = [IsAuthenticated]
 
@@ -149,19 +166,19 @@ class FitnessGoalProgressViewSet(viewsets.ReadOnlyModelViewSet):
         if getattr(self, 'swagger_fake_view', False):
             return FitnessGoalProgress.objects.none()
         return FitnessGoalProgress.objects.filter(goal__user=self.request.user)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     @swagger_auto_schema(
         operation_description="Retrieve progress history for a specific fitness goal.",
         responses={200: FitnessGoalProgressSerializer(many=True)},
     )
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieve all progress entries for a specific fitness goal.
         """
-        fitnessgoal_id = kwargs.get('pk')  # Assuming 'pk' is used for fitnessgoal_id
+        fitnessgoal_id = kwargs.get('pk')
         progress_entries = self.get_queryset().filter(goal_id=fitnessgoal_id)
 
         if not progress_entries.exists():

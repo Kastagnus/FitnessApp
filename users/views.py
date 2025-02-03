@@ -12,8 +12,16 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.views import TokenObtainPairView
 class RegisterView(generics.CreateAPIView):
+    
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
+    @swagger_auto_schema(
+        operation_description="Register new user with username and password.",
+        responses={200: RegisterSerializer, 400: "Bad request (e.g., invalid username or password)"},
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+        
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -36,7 +44,7 @@ class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Allows authenticated users to change their password.",
-        security=[{'Bearer': []}],  # Tell Swagger this requires JWT authentication
+        security=[{'Bearer': []}],  # JWT initialization
         manual_parameters=[
             openapi.Parameter(
                 'Authorization',
@@ -62,6 +70,7 @@ class ChangePasswordView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileView(RetrieveUpdateAPIView):
+
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
@@ -72,6 +81,12 @@ class UserProfileView(RetrieveUpdateAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+    @swagger_auto_schema(
+        operation_description="Update the authenticated user's profile.",
+        responses={200: UserProfileSerializer},
+    )
+    def put(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
     @swagger_auto_schema(
         operation_description="Update the authenticated user's profile.",
         responses={200: UserProfileSerializer},
