@@ -73,6 +73,7 @@ ALLOWED_HOSTS=localhost,127.0.0.1
 DB_NAME=YOUR_DB_NAME
 DB_USER=YOUR_DB_USER
 DB_PASSWORD=YOUR_DB_PASSWORD
+DB_HOST=db
 DB_PORT=5432
 ```
 
@@ -92,13 +93,13 @@ This will:
 To run migrations inside the container:
 
 ```sh
-docker exec -it your-container-name python manage.py migrate
+docker-compose exec -it your-container-name python manage.py migrate
 ```
 
 To create a superuser:
 
 ```sh
-docker exec -it your-container-name python manage.py createsuperuser
+docker-compose exec -it your-container-name python manage.py createsuperuser
 ```
 
 To populate the workout database:
