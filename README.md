@@ -57,8 +57,8 @@ Ensure you have the following installed:
 ### 📂 Clone the Repository
 
 ```sh
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+git clone https://github.com/Kastagnus/FitnessApp.git
+cd fitnessapp
 ```
 
 ### 🔑 Environment Variables
