@@ -2,16 +2,20 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import FitnessGoal, FitnessGoalProgress
-from .serializers import FitnessGoalSerializer, FitnessGoalProgressSerializer
+from .serializers import FitnessGoalProgressSerializer, FitnessGoalUpdateSerializer, \
+    FitnessGoalCreateSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 
 
 class FitnessGoalViewSet(viewsets.ModelViewSet):
-    """Viewset for managing fitness goals"""
-    serializer_class = FitnessGoalSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action in ['update', 'partial_update']:
+            return FitnessGoalUpdateSerializer
+        return FitnessGoalCreateSerializer
 
     def get_queryset(self):
         """Return fitness goals for the authenticated user."""
@@ -79,10 +83,9 @@ class FitnessGoalViewSet(viewsets.ModelViewSet):
             },
             required=["goal_type", "target_value", "current_progress"],
         ),
-        responses={201: FitnessGoalSerializer},
+        responses={201: FitnessGoalCreateSerializer},
     )
     def create(self, request, *args, **kwargs):
-        """Handles the creation of a fitness goal."""
         return super().create(request, *args, **kwargs)
 
     @swagger_auto_schema(
@@ -91,47 +94,21 @@ class FitnessGoalViewSet(viewsets.ModelViewSet):
             type=openapi.TYPE_OBJECT,
             properties={
                 'target_value': openapi.Schema(
-                    type = openapi.TYPE_NUMBER,
-                    format = openapi.FORMAT_FLOAT,
-                    description = "Target weight (kg) for weight loss or strength goal (kg) for muscle gain."
-                    ),
-                "current_progress": openapi.Schema(
-                    type=openapi.TYPE_NUMBER,
-                    format=openapi.FORMAT_FLOAT,
-                    description="Update user's current weight or lifting progress."
-                ),
-            },
-            required=["current_progress"],
-        ),
-        responses={200: FitnessGoalSerializer},
-    )
-    def update(self, request, *args, **kwargs):
-        """Handles updating a fitness goal's progress."""
-        return super().update(request, *args, **kwargs)
-
-    @swagger_auto_schema(
-        operation_description="Update an existing fitness goal.",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-
-                "current_progress": openapi.Schema(
-                    type=openapi.TYPE_NUMBER,
-                    format=openapi.FORMAT_FLOAT,
-                    description="Update user's current weight or lifting progress."
-                ),
-                'target_value': openapi.Schema(
                     type=openapi.TYPE_NUMBER,
                     format=openapi.FORMAT_FLOAT,
                     description="Target weight (kg) for weight loss or strength goal (kg) for muscle gain."
                 ),
+                "current_progress": openapi.Schema(
+                    type=openapi.TYPE_NUMBER,
+                    format=openapi.FORMAT_FLOAT,
+                    description="Update user's current weight or lifting progress."
+                ),
             },
             required=["current_progress"],
         ),
-        responses={200: FitnessGoalSerializer},
+        responses={200: FitnessGoalUpdateSerializer},
     )
-    def partial_update(self, request, *args, **kwargs):
-        """Handles updating a fitness goal's progress."""
+    def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
 
     @swagger_auto_schema(
@@ -162,6 +139,7 @@ class FitnessGoalViewSet(viewsets.ModelViewSet):
         goal.save()
         return Response({"message": f"Goal status updated to {new_status}."})
 
+
 class FitnessGoalProgressViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for retrieving progress history of a goal."""
     serializer_class = FitnessGoalProgressSerializer
@@ -178,3 +156,19 @@ class FitnessGoalProgressViewSet(viewsets.ReadOnlyModelViewSet):
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve all progress entries for a specific fitness goal.
+        """
+        fitnessgoal_id = kwargs.get('pk')  # Assuming 'pk' is used for fitnessgoal_id
+        progress_entries = self.get_queryset().filter(goal_id=fitnessgoal_id)
+
+        if not progress_entries.exists():
+            return Response(
+                {"detail": "No progress entries found for this fitness goal."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = self.get_serializer(progress_entries, many=True)
+        return Response(serializer.data)

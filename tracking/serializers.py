@@ -6,11 +6,11 @@ class FitnessGoalProgressSerializer(serializers.ModelSerializer):
         model = FitnessGoalProgress
         fields = ["date", "progress_value"]
 
-class FitnessGoalSerializer(serializers.ModelSerializer):
+class FitnessGoalCreateSerializer(serializers.ModelSerializer):
     progress_entries = FitnessGoalProgressSerializer(many=True, read_only=True)
     progress_percentage = serializers.SerializerMethodField(read_only=True)
-    starting_weight = serializers.FloatField(read_only=True)  # ✅ Make starting weight read-only
-    goal_type = serializers.CharField(source="get_goal_type_display", read_only=True)
+    starting_weight = serializers.FloatField(read_only=True)
+
     class Meta:
         model = FitnessGoal
         fields = [
@@ -19,11 +19,22 @@ class FitnessGoalSerializer(serializers.ModelSerializer):
         ]
 
     def get_progress_percentage(self, obj):
-        return obj.progress_percentage()  # ✅ Call model method
+        return obj.progress_percentage()
 
-    def get_progress_entries(self, obj):
-        """Retrieve all progress entries sorted by date."""
-        return FitnessGoalProgressSerializer(obj.progress_entries.order_by("date"), many=True).data
+class FitnessGoalUpdateSerializer(serializers.ModelSerializer):
+    progress_entries = FitnessGoalProgressSerializer(many=True, read_only=True)
+    progress_percentage = serializers.SerializerMethodField(read_only=True)
+    starting_weight = serializers.FloatField(read_only=True)
 
+    class Meta:
+        model = FitnessGoal
+        fields = [
+            "id", "goal_type", "target_value", "starting_weight",
+            "current_progress", "progress_percentage", "status", "progress_entries"
+        ]
+        extra_kwargs = {
+            'goal_type': {'read_only': True}  # This makes it read-only for updates
+        }
 
-
+    def get_progress_percentage(self, obj):
+        return obj.progress_percentage()
