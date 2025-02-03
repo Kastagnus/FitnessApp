@@ -64,7 +64,7 @@ cd fitnessapp
 ### 🔑 Environment Variables
 
 Create a `.env` file in the root directory with the following variables:
-
+- Change YOUR_DB_NAME / YOUR_DB_USER / YOUR_DB_PASSWORD with your credentials
 ```
 DEBUG=1
 SECRET_KEY=$(python -c 'import secrets; print(secrets.token_urlsafe(50))')
@@ -90,6 +90,8 @@ This will:
 - 🏗 Build the necessary containers
 - 🚀 Start the Django API and PostgreSQL services
 
+Below find commands for final setup. (use "web" instead of "your-container-name" if you do not make changes into docker-compose.yaml file) 
+
 To run migrations inside the container:
 
 ```sh
@@ -105,7 +107,7 @@ docker-compose exec -it your-container-name python manage.py createsuperuser
 To populate the workout database:
 
 ```sh
-docker-compose exec container_name python workouts/populate.py
+docker-compose exec your_container_name python workouts/populate.py
 ```
 
 ## 📖 API Documentation
