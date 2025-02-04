@@ -119,4 +119,14 @@ http://localhost:8000/api/docs/
 ```
 
 This provides a user-friendly interface to test and interact with the API.
+## Swagger Guide
+- Register new user or generate token with created superuser
+- On top right corner open Authorize and enter "Bearer your-access-token"
+- Once you are authorised you can:
+  - Change password
+  - Update user profile
+  - create workout plan (UPDATE/DELETE/RETRIEVE)
+  - create fitness Goal tracking (UPDATE/DELETE/RETRIEVE)
+  - create workout session and dynamically update data of every set on each exercise. (UPDATE/DELETE/RETRIEVE)
+
 
